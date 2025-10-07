@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   Sprout, 
   TrendingUp, 
@@ -41,10 +42,31 @@ const steps = [
 ];
 
 const Index = () => {
+  const [cropsData, setCropsData] = useState(crops);
   const [selectedCrop, setSelectedCrop] = useState(crops[0]);
+  const [harvestInput, setHarvestInput] = useState("");
   const [showUpdateToast, setShowUpdateToast] = useState(false);
 
   const handleUpdateHarvest = () => {
+    const amount = parseFloat(harvestInput);
+    if (!amount || amount <= 0 || isNaN(amount)) {
+      return;
+    }
+
+    const updatedCrops = cropsData.map(crop => {
+      if (crop.name === selectedCrop.name) {
+        const newHarvested = Math.min(crop.harvested + amount, crop.total);
+        return { ...crop, harvested: newHarvested };
+      }
+      return crop;
+    });
+
+    setCropsData(updatedCrops);
+    const updatedSelected = updatedCrops.find(c => c.name === selectedCrop.name);
+    if (updatedSelected) {
+      setSelectedCrop(updatedSelected);
+    }
+    setHarvestInput("");
     setShowUpdateToast(true);
     setTimeout(() => setShowUpdateToast(false), 2000);
   };
@@ -104,11 +126,11 @@ const Index = () => {
                 </div>
                 <div className="flex-1">
                   <p className="text-lg text-foreground leading-relaxed">
-                    Farmers use the Barn Buddy app to log harvest quantities, track remaining crop 
-                    demand, and sell produce directly to retailers like Keells and Cargills with a 
-                    <span className="font-semibold text-primary"> Rs. 10 margin</span>. 
-                    Our platform bridges the gap between farmers and retailers, ensuring fair prices 
-                    and reducing wastage through better coordination and real-time tracking.
+                    Barn Buddy is a platform designed to simplify how farmers manage their harvests. 
+                    We buy your produce directly at a fixed, fair price, protecting you from market 
+                    fluctuations—so even if prices rise to Rs. 400+ or Rs. 1000+, you still receive 
+                    the agreed fixed value. Our system also helps you track your harvested quantities 
+                    and remaining crop, ensuring better planning and coordination while reducing wastage.
                   </p>
                 </div>
               </div>
@@ -148,19 +170,34 @@ const Index = () => {
                   className="h-4"
                 />
                 
-                <div className="flex items-center justify-between pt-4">
+                <div className="space-y-4 pt-4">
                   <div className="text-sm text-muted-foreground">
                     Progress: <span className="font-semibold text-primary">
                       {Math.round((selectedCrop.harvested / selectedCrop.total) * 100)}%
                     </span>
                   </div>
-                  <Button 
-                    onClick={handleUpdateHarvest}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                  >
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    Update Harvest
-                  </Button>
+                  
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1">
+                      <Input
+                        type="number"
+                        placeholder="Enter harvest amount (tons)"
+                        value={harvestInput}
+                        onChange={(e) => setHarvestInput(e.target.value)}
+                        className="w-full"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <Button 
+                      onClick={handleUpdateHarvest}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                      disabled={!harvestInput || parseFloat(harvestInput) <= 0}
+                    >
+                      <TrendingUp className="w-4 h-4 mr-2" />
+                      Update Harvest
+                    </Button>
+                  </div>
                 </div>
 
                 {showUpdateToast && (
@@ -176,7 +213,7 @@ const Index = () => {
 
             {/* Crop Selection Cards */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {crops.map((crop) => (
+              {cropsData.map((crop) => (
                 <Card
                   key={crop.name}
                   className={`p-4 cursor-pointer transition-all duration-300 hover:scale-105 ${
