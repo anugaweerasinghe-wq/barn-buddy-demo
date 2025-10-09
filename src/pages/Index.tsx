@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -42,6 +43,7 @@ const steps = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
   const [cropsData, setCropsData] = useState(crops);
   const [selectedCrop, setSelectedCrop] = useState(crops[0]);
   const [harvestInput, setHarvestInput] = useState("");
@@ -101,6 +103,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              onClick={() => navigate("/auth")}
             >
               Get Started <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
