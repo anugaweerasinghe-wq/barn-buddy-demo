@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      harvest_records: {
+        Row: {
+          amount: number
+          crop_name: string
+          id: string
+          recorded_at: string
+          total_target: number
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          crop_name: string
+          id?: string
+          recorded_at?: string
+          total_target: number
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          crop_name?: string
+          id?: string
+          recorded_at?: string
+          total_target?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          farm_location: string | null
+          farm_name: string | null
+          id: string
+          name: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          farm_location?: string | null
+          farm_name?: string | null
+          id: string
+          name: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          farm_location?: string | null
+          farm_name?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
