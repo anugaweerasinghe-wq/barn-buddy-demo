@@ -10,7 +10,10 @@ import {
   Sprout, 
   TrendingUp, 
   LogOut,
-  User
+  User,
+  Apple,
+  Carrot,
+  CheckCircle2
 } from "lucide-react";
 
 interface Profile {
@@ -19,29 +22,20 @@ interface Profile {
   farm_location: string | null;
 }
 
-interface Crop {
-  name: string;
-  icon: any;
-  harvested: number;
-  total: number;
-}
+type Category = "fruits" | "vegetables" | null;
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  
-  const [cropsData, setCropsData] = useState<Crop[]>([
-    { name: "Potatoes", icon: "🥔", harvested: 120, total: 150 },
-    { name: "Tomatoes", icon: "🍅", harvested: 80, total: 100 },
-    { name: "Carrots", icon: "🥕", harvested: 45, total: 80 },
-    { name: "Cabbage", icon: "🥬", harvested: 30, total: 60 },
-    { name: "Onions", icon: "🧅", harvested: 55, total: 70 },
-  ]);
-  
-  const [selectedCrop, setSelectedCrop] = useState(cropsData[0]);
-  const [harvestInput, setHarvestInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Category>(null);
+  const [fruitsAmount, setFruitsAmount] = useState("");
+  const [vegetablesAmount, setVegetablesAmount] = useState("");
+  const [fruitsTons, setFruitsTons] = useState(0);
+  const [vegetablesTons, setVegetablesTons] = useState(0);
+  const [showFruitsToast, setShowFruitsToast] = useState(false);
+  const [showVegetablesToast, setShowVegetablesToast] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -82,39 +76,50 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const handleUpdateHarvest = async () => {
-    const amount = parseFloat(harvestInput);
+  const handleUpdateFruits = () => {
+    const amount = parseFloat(fruitsAmount);
     if (!amount || amount <= 0 || isNaN(amount)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid amount",
+        description: "Please enter a valid amount.",
+      });
       return;
     }
 
-    try {
-      const updatedCrops = cropsData.map(crop => {
-        if (crop.name === selectedCrop.name) {
-          const newHarvested = Math.min(crop.harvested + amount, crop.total);
-          return { ...crop, harvested: newHarvested };
-        }
-        return crop;
-      });
+    setFruitsTons(prev => prev + amount);
+    setFruitsAmount("");
+    
+    toast({
+      title: "Fruits updated!",
+      description: `Successfully added ${amount} tons of fruits.`,
+    });
 
-      setCropsData(updatedCrops);
-      const updatedSelected = updatedCrops.find(c => c.name === selectedCrop.name);
-      if (updatedSelected) {
-        setSelectedCrop(updatedSelected);
-      }
-      setHarvestInput("");
-      
+    setShowFruitsToast(true);
+    setTimeout(() => setShowFruitsToast(false), 2000);
+  };
+
+  const handleUpdateVegetables = () => {
+    const amount = parseFloat(vegetablesAmount);
+    if (!amount || amount <= 0 || isNaN(amount)) {
       toast({
-        title: "Harvest Updated!",
-        description: `Added ${amount} tons to ${selectedCrop.name}`,
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
         variant: "destructive",
+        title: "Invalid amount",
+        description: "Please enter a valid amount.",
       });
+      return;
     }
+
+    setVegetablesTons(prev => prev + amount);
+    setVegetablesAmount("");
+    
+    toast({
+      title: "Vegetables updated!",
+      description: `Successfully added ${amount} tons of vegetables.`,
+    });
+
+    setShowVegetablesToast(true);
+    setTimeout(() => setShowVegetablesToast(false), 2000);
   };
 
   if (loading) {
@@ -128,9 +133,85 @@ const Dashboard = () => {
     );
   }
 
+  if (!selectedCategory) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Sprout className="w-8 h-8 text-primary" />
+              <h1 className="text-2xl font-bold text-foreground">Barn Buddy</h1>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <User className="w-5 h-5 text-muted-foreground" />
+                <span className="text-sm font-medium">{profile?.name}</span>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center space-y-2 animate-fade-in">
+              <h2 className="text-4xl font-bold text-foreground">
+                Welcome, {profile?.name}! 👋
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                Choose what you want to track
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mt-12">
+              <Card 
+                className="p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card border-border hover:border-primary/50"
+                onClick={() => setSelectedCategory("fruits")}
+              >
+                <div className="text-center space-y-4">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                    <Apple className="w-10 h-10 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground">Fruits</h3>
+                  <p className="text-muted-foreground">Track your fruit cultivation</p>
+                  {fruitsTons > 0 && (
+                    <p className="text-sm font-semibold text-primary">
+                      Total: {fruitsTons} tons
+                    </p>
+                  )}
+                </div>
+              </Card>
+
+              <Card 
+                className="p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card border-border hover:border-primary/50"
+                onClick={() => setSelectedCategory("vegetables")}
+              >
+                <div className="text-center space-y-4">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                    <Carrot className="w-10 h-10 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground">Vegetables</h3>
+                  <p className="text-muted-foreground">Track your vegetable cultivation</p>
+                  {vegetablesTons > 0 && (
+                    <p className="text-sm font-semibold text-primary">
+                      Total: {vegetablesTons} tons
+                    </p>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-      {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -151,98 +232,85 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
-        {/* Welcome Section */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back, {profile?.name}!
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
+            {selectedCategory === "fruits" ? (
+              <>
+                <Apple className="w-8 h-8 text-primary" />
+                Fruits Cultivation
+              </>
+            ) : (
+              <>
+                <Carrot className="w-8 h-8 text-primary" />
+                Vegetables Cultivation
+              </>
+            )}
           </h2>
-          {profile?.farm_name && (
-            <p className="text-muted-foreground">
-              {profile.farm_name} {profile.farm_location && `• ${profile.farm_location}`}
-            </p>
-          )}
+          <Button 
+            variant="outline"
+            onClick={() => setSelectedCategory(null)}
+          >
+            Back to Categories
+          </Button>
         </div>
 
-        {/* Harvest Tracker */}
-        <Card className="p-8 mb-8">
-          <h3 className="text-2xl font-bold text-foreground mb-6">
-            Harvest Progress Tracker
-          </h3>
-          
+        <Card className="p-8 max-w-3xl mx-auto">
           <div className="space-y-6">
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl">{selectedCrop.icon}</span>
-                <span className="text-lg font-semibold text-foreground">
-                  {selectedCrop.name}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {selectedCrop.harvested} / {selectedCrop.total} tons
-                </span>
-              </div>
+              <h3 className="text-2xl font-semibold text-foreground">
+                Total {selectedCategory === "fruits" ? "Fruits" : "Vegetables"} Cultivated
+              </h3>
+              <p className="text-5xl font-bold text-primary">
+                {selectedCategory === "fruits" ? fruitsTons : vegetablesTons} tons
+              </p>
+            </div>
+
+            <div className="space-y-4 pt-4 border-t">
+              <p className="text-sm text-muted-foreground">
+                Enter the amount you cultivated (tons):
+              </p>
               
-              <Progress
-                value={(selectedCrop.harvested / selectedCrop.total) * 100}
-                className="h-4"
-              />
-              
-              <div className="space-y-4 pt-4">
-                <div className="text-sm text-muted-foreground">
-                  Progress: <span className="font-semibold text-primary">
-                    {Math.round((selectedCrop.harvested / selectedCrop.total) * 100)}%
-                  </span>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Input
+                    type="number"
+                    placeholder="Enter amount (tons)"
+                    value={selectedCategory === "fruits" ? fruitsAmount : vegetablesAmount}
+                    onChange={(e) => 
+                      selectedCategory === "fruits" 
+                        ? setFruitsAmount(e.target.value)
+                        : setVegetablesAmount(e.target.value)
+                    }
+                    className="w-full"
+                    min="0"
+                    step="0.1"
+                  />
                 </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="flex-1">
-                    <Input
-                      type="number"
-                      placeholder="Enter harvest amount (tons)"
-                      value={harvestInput}
-                      onChange={(e) => setHarvestInput(e.target.value)}
-                      className="w-full"
-                      min="0"
-                      step="0.1"
-                    />
-                  </div>
-                  <Button 
-                    onClick={handleUpdateHarvest}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                    disabled={!harvestInput || parseFloat(harvestInput) <= 0}
-                  >
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    Update Harvest
-                  </Button>
-                </div>
+                <Button 
+                  onClick={selectedCategory === "fruits" ? handleUpdateFruits : handleUpdateVegetables}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  disabled={
+                    selectedCategory === "fruits"
+                      ? !fruitsAmount || parseFloat(fruitsAmount) <= 0
+                      : !vegetablesAmount || parseFloat(vegetablesAmount) <= 0
+                  }
+                >
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Update Amount
+                </Button>
               </div>
             </div>
 
-            {/* Crop Selection Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 pt-4">
-              {cropsData.map((crop) => (
-                <Card
-                  key={crop.name}
-                  className={`p-4 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                    selectedCrop.name === crop.name
-                      ? "ring-2 ring-primary bg-primary/5"
-                      : "hover:bg-accent"
-                  }`}
-                  onClick={() => setSelectedCrop(crop)}
-                >
-                  <div className="text-center">
-                    <div className="text-3xl mb-2">{crop.icon}</div>
-                    <p className="text-sm font-medium text-foreground">
-                      {crop.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {Math.round((crop.harvested / crop.total) * 100)}%
-                    </p>
-                  </div>
-                </Card>
-              ))}
-            </div>
+            {((selectedCategory === "fruits" && showFruitsToast) || 
+              (selectedCategory === "vegetables" && showVegetablesToast)) && (
+              <div className="flex items-center gap-2 p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                <CheckCircle2 className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium text-foreground">
+                  Data updated successfully!
+                </span>
+              </div>
+            )}
           </div>
         </Card>
       </main>
