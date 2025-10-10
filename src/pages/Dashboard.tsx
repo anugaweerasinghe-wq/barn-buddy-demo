@@ -24,18 +24,40 @@ interface Profile {
 
 type Category = "fruits" | "vegetables" | null;
 
+interface Item {
+  name: string;
+  icon: string;
+  amount: number;
+}
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<Category>(null);
-  const [fruitsAmount, setFruitsAmount] = useState("");
-  const [vegetablesAmount, setVegetablesAmount] = useState("");
-  const [fruitsTons, setFruitsTons] = useState(0);
-  const [vegetablesTons, setVegetablesTons] = useState(0);
-  const [showFruitsToast, setShowFruitsToast] = useState(false);
-  const [showVegetablesToast, setShowVegetablesToast] = useState(false);
+  
+  // Top 5 most wasted fruits in Sri Lanka
+  const [fruits, setFruits] = useState<Item[]>([
+    { name: "Mango", icon: "🥭", amount: 0 },
+    { name: "Banana", icon: "🍌", amount: 0 },
+    { name: "Papaya", icon: "🍈", amount: 0 },
+    { name: "Pineapple", icon: "🍍", amount: 0 },
+    { name: "Watermelon", icon: "🍉", amount: 0 },
+  ]);
+
+  // Top 5 most wasted vegetables in Sri Lanka
+  const [vegetables, setVegetables] = useState<Item[]>([
+    { name: "Tomato", icon: "🍅", amount: 0 },
+    { name: "Cabbage", icon: "🥬", amount: 0 },
+    { name: "Carrot", icon: "🥕", amount: 0 },
+    { name: "Beans", icon: "🫘", amount: 0 },
+    { name: "Leeks", icon: "🧅", amount: 0 },
+  ]);
+
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [inputAmount, setInputAmount] = useState("");
+  const [showUpdateToast, setShowUpdateToast] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -76,8 +98,8 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const handleUpdateFruits = () => {
-    const amount = parseFloat(fruitsAmount);
+  const handleUpdateAmount = () => {
+    const amount = parseFloat(inputAmount);
     if (!amount || amount <= 0 || isNaN(amount)) {
       toast({
         variant: "destructive",
@@ -87,39 +109,50 @@ const Dashboard = () => {
       return;
     }
 
-    setFruitsTons(prev => prev + amount);
-    setFruitsAmount("");
+    if (!selectedItem) return;
+
+    if (selectedCategory === "fruits") {
+      setFruits(prev => prev.map(item => 
+        item.name === selectedItem.name 
+          ? { ...item, amount: item.amount + amount }
+          : item
+      ));
+      const updatedItem = fruits.find(f => f.name === selectedItem.name);
+      if (updatedItem) {
+        setSelectedItem({ ...updatedItem, amount: updatedItem.amount + amount });
+      }
+    } else if (selectedCategory === "vegetables") {
+      setVegetables(prev => prev.map(item => 
+        item.name === selectedItem.name 
+          ? { ...item, amount: item.amount + amount }
+          : item
+      ));
+      const updatedItem = vegetables.find(v => v.name === selectedItem.name);
+      if (updatedItem) {
+        setSelectedItem({ ...updatedItem, amount: updatedItem.amount + amount });
+      }
+    }
+
+    setInputAmount("");
     
     toast({
-      title: "Fruits updated!",
-      description: `Successfully added ${amount} tons of fruits.`,
+      title: "Amount updated!",
+      description: `Successfully added ${amount} tons of ${selectedItem.name}.`,
     });
 
-    setShowFruitsToast(true);
-    setTimeout(() => setShowFruitsToast(false), 2000);
+    setShowUpdateToast(true);
+    setTimeout(() => setShowUpdateToast(false), 2000);
   };
 
-  const handleUpdateVegetables = () => {
-    const amount = parseFloat(vegetablesAmount);
-    if (!amount || amount <= 0 || isNaN(amount)) {
-      toast({
-        variant: "destructive",
-        title: "Invalid amount",
-        description: "Please enter a valid amount.",
-      });
-      return;
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleUpdateAmount();
     }
+  };
 
-    setVegetablesTons(prev => prev + amount);
-    setVegetablesAmount("");
-    
-    toast({
-      title: "Vegetables updated!",
-      description: `Successfully added ${amount} tons of vegetables.`,
-    });
-
-    setShowVegetablesToast(true);
-    setTimeout(() => setShowVegetablesToast(false), 2000);
+  const getTotalAmount = () => {
+    const items = selectedCategory === "fruits" ? fruits : vegetables;
+    return items.reduce((sum, item) => sum + item.amount, 0);
   };
 
   if (loading) {
@@ -170,7 +203,10 @@ const Dashboard = () => {
             <div className="grid md:grid-cols-2 gap-6 mt-12">
               <Card 
                 className="p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card border-border hover:border-primary/50"
-                onClick={() => setSelectedCategory("fruits")}
+                onClick={() => {
+                  setSelectedCategory("fruits");
+                  setSelectedItem(fruits[0]);
+                }}
               >
                 <div className="text-center space-y-4">
                   <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
@@ -178,9 +214,9 @@ const Dashboard = () => {
                   </div>
                   <h3 className="text-2xl font-bold text-foreground">Fruits</h3>
                   <p className="text-muted-foreground">Track your fruit cultivation</p>
-                  {fruitsTons > 0 && (
+                  {getTotalAmount() > 0 && selectedCategory === "fruits" && (
                     <p className="text-sm font-semibold text-primary">
-                      Total: {fruitsTons} tons
+                      Total: {getTotalAmount()} tons
                     </p>
                   )}
                 </div>
@@ -188,7 +224,10 @@ const Dashboard = () => {
 
               <Card 
                 className="p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl bg-card border-border hover:border-primary/50"
-                onClick={() => setSelectedCategory("vegetables")}
+                onClick={() => {
+                  setSelectedCategory("vegetables");
+                  setSelectedItem(vegetables[0]);
+                }}
               >
                 <div className="text-center space-y-4">
                   <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
@@ -196,9 +235,9 @@ const Dashboard = () => {
                   </div>
                   <h3 className="text-2xl font-bold text-foreground">Vegetables</h3>
                   <p className="text-muted-foreground">Track your vegetable cultivation</p>
-                  {vegetablesTons > 0 && (
+                  {getTotalAmount() > 0 && selectedCategory === "vegetables" && (
                     <p className="text-sm font-semibold text-primary">
-                      Total: {vegetablesTons} tons
+                      Total: {getTotalAmount()} tons
                     </p>
                   )}
                 </div>
@@ -233,86 +272,129 @@ const Dashboard = () => {
       </header>
 
       <main className="container mx-auto px-4 py-12">
-        <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            {selectedCategory === "fruits" ? (
-              <>
-                <Apple className="w-8 h-8 text-primary" />
-                Fruits Cultivation
-              </>
-            ) : (
-              <>
-                <Carrot className="w-8 h-8 text-primary" />
-                Vegetables Cultivation
-              </>
-            )}
-          </h2>
-          <Button 
-            variant="outline"
-            onClick={() => setSelectedCategory(null)}
-          >
-            Back to Categories
-          </Button>
-        </div>
-
-        <Card className="p-8 max-w-3xl mx-auto">
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-semibold text-foreground">
-                Total {selectedCategory === "fruits" ? "Fruits" : "Vegetables"} Cultivated
-              </h3>
-              <p className="text-5xl font-bold text-primary">
-                {selectedCategory === "fruits" ? fruitsTons : vegetablesTons} tons
-              </p>
-            </div>
-
-            <div className="space-y-4 pt-4 border-t">
-              <p className="text-sm text-muted-foreground">
-                Enter the amount you cultivated (tons):
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
-                  <Input
-                    type="number"
-                    placeholder="Enter amount (tons)"
-                    value={selectedCategory === "fruits" ? fruitsAmount : vegetablesAmount}
-                    onChange={(e) => 
-                      selectedCategory === "fruits" 
-                        ? setFruitsAmount(e.target.value)
-                        : setVegetablesAmount(e.target.value)
-                    }
-                    className="w-full"
-                    min="0"
-                    step="0.1"
-                  />
-                </div>
-                <Button 
-                  onClick={selectedCategory === "fruits" ? handleUpdateFruits : handleUpdateVegetables}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                  disabled={
-                    selectedCategory === "fruits"
-                      ? !fruitsAmount || parseFloat(fruitsAmount) <= 0
-                      : !vegetablesAmount || parseFloat(vegetablesAmount) <= 0
-                  }
-                >
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Update Amount
-                </Button>
-              </div>
-            </div>
-
-            {((selectedCategory === "fruits" && showFruitsToast) || 
-              (selectedCategory === "vegetables" && showVegetablesToast)) && (
-              <div className="flex items-center gap-2 p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium text-foreground">
-                  Data updated successfully!
-                </span>
-              </div>
-            )}
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              {selectedCategory === "fruits" ? (
+                <>
+                  <Apple className="w-8 h-8 text-primary" />
+                  Top 5 Most Wasted Fruits in Sri Lanka
+                </>
+              ) : (
+                <>
+                  <Carrot className="w-8 h-8 text-primary" />
+                  Top 5 Most Wasted Vegetables in Sri Lanka
+                </>
+              )}
+            </h2>
+            <Button 
+              variant="outline"
+              onClick={() => {
+                setSelectedCategory(null);
+                setSelectedItem(null);
+              }}
+            >
+              Back to Categories
+            </Button>
           </div>
-        </Card>
+
+          {/* Main Tracker Card */}
+          {selectedItem && (
+            <Card className="p-8 bg-card shadow-xl border-border">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-2xl font-semibold text-foreground flex items-center gap-2">
+                    <span className="text-3xl">{selectedItem.icon}</span>
+                    {selectedItem.name}
+                  </h3>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    {selectedItem.amount} tons cultivated
+                  </span>
+                </div>
+
+                <div className="space-y-4 pt-4">
+                  <div className="text-sm text-muted-foreground">
+                    Total cultivated: <span className="font-semibold text-primary text-lg">
+                      {selectedItem.amount} tons
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1">
+                      <Input
+                        type="number"
+                        placeholder="Enter amount (tons)"
+                        value={inputAmount}
+                        onChange={(e) => setInputAmount(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        className="w-full"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <Button 
+                      onClick={handleUpdateAmount}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                      disabled={!inputAmount || parseFloat(inputAmount) <= 0}
+                    >
+                      <TrendingUp className="w-4 h-4 mr-2" />
+                      Update Amount
+                    </Button>
+                  </div>
+                </div>
+
+                {showUpdateToast && (
+                  <div className="flex items-center gap-2 p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                    <span className="text-sm font-medium text-foreground">
+                      Amount updated successfully!
+                    </span>
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
+
+          {/* Selection Cards */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground">
+              Select {selectedCategory}:
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {(selectedCategory === "fruits" ? fruits : vegetables).map((item) => (
+                <Card
+                  key={item.name}
+                  className={`p-4 cursor-pointer transition-all duration-300 hover:scale-105 ${
+                    selectedItem?.name === item.name
+                      ? "bg-primary/10 border-primary shadow-lg"
+                      : "bg-card border-border hover:border-primary/50"
+                  }`}
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <div className="text-center space-y-2">
+                    <div className="text-4xl">{item.icon}</div>
+                    <p className="font-medium text-foreground text-sm">{item.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {item.amount}t
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Total Summary */}
+          <Card className="p-6 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground mb-2">
+                Total {selectedCategory === "fruits" ? "Fruits" : "Vegetables"} Cultivated
+              </p>
+              <p className="text-4xl font-bold text-primary">
+                {getTotalAmount()} tons
+              </p>
+            </div>
+          </Card>
+        </div>
       </main>
     </div>
   );
