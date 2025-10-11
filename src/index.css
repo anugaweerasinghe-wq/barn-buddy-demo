@@ -38,10 +38,15 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
     
-    --gradient-hero: linear-gradient(135deg, hsl(142 65% 42%), hsl(142 75% 52%));
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(142 40% 98%));
-    --shadow-soft: 0 4px 20px -4px hsl(142 65% 42% / 0.15);
-    --shadow-hover: 0 8px 30px -6px hsl(142 65% 42% / 0.25);
+    --gradient-hero: linear-gradient(135deg, hsl(142 70% 45%), hsl(142 80% 55%), hsl(142 65% 50%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(142 40% 98%), hsl(142 30% 96%));
+    --gradient-premium: linear-gradient(135deg, hsl(142 70% 50%), hsl(142 60% 45%), hsl(142 80% 60%));
+    --gradient-overlay: linear-gradient(135deg, hsl(142 65% 42% / 0.1), hsl(142 75% 52% / 0.05));
+    --shadow-soft: 0 4px 20px -4px hsl(142 65% 42% / 0.2);
+    --shadow-hover: 0 12px 40px -8px hsl(142 65% 42% / 0.35);
+    --shadow-glow: 0 0 40px hsl(142 65% 42% / 0.3);
+    --blur-glass: blur(12px);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -89,10 +94,15 @@ All colors MUST be HSL.
     --input: 142 20% 20%;
     --ring: 142 65% 55%;
     
-    --gradient-hero: linear-gradient(135deg, hsl(142 65% 35%), hsl(142 75% 45%));
-    --gradient-card: linear-gradient(180deg, hsl(142 25% 10%), hsl(142 25% 12%));
-    --shadow-soft: 0 4px 20px -4px hsl(142 65% 42% / 0.3);
-    --shadow-hover: 0 8px 30px -6px hsl(142 65% 42% / 0.4);
+    --gradient-hero: linear-gradient(135deg, hsl(142 65% 35%), hsl(142 75% 45%), hsl(142 60% 40%));
+    --gradient-card: linear-gradient(135deg, hsl(142 25% 10%), hsl(142 25% 12%), hsl(142 20% 14%));
+    --gradient-premium: linear-gradient(135deg, hsl(142 65% 45%), hsl(142 55% 40%), hsl(142 75% 50%));
+    --gradient-overlay: linear-gradient(135deg, hsl(142 65% 42% / 0.15), hsl(142 75% 52% / 0.1));
+    --shadow-soft: 0 4px 20px -4px hsl(142 65% 42% / 0.4);
+    --shadow-hover: 0 12px 40px -8px hsl(142 65% 42% / 0.5);
+    --shadow-glow: 0 0 40px hsl(142 65% 42% / 0.4);
+    --blur-glass: blur(12px);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

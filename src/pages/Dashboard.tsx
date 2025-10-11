@@ -168,22 +168,38 @@ const Dashboard = () => {
 
   if (!selectedCategory) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-primary/5">
-        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/20 relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+        </div>
+
+        <header className="border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 sticky top-0 z-50 shadow-lg">
+          <div className="container mx-auto px-4 py-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
-                <Sprout className="w-6 h-6 text-primary-foreground" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary/80 to-primary/60 flex items-center justify-center shadow-lg">
+                <Sprout className="w-7 h-7 text-primary-foreground drop-shadow-md" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Barn Buddy</h1>
+              <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent drop-shadow-sm">
+                Barn Buddy
+              </h1>
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-secondary/50">
-                <User className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium">{profile?.name}</span>
+              <div className="flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-secondary to-secondary/80 shadow-md border border-primary/20">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                  <User className="w-4 h-4 text-primary-foreground" />
+                </div>
+                <span className="text-sm font-semibold text-foreground">{profile?.name}</span>
               </div>
-              <Button variant="outline" size="sm" onClick={handleLogout} className="rounded-full">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleLogout} 
+                className="rounded-full border-2 hover:border-primary/50 hover:bg-primary/5 transition-all shadow-md hover:shadow-lg"
+              >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
               </Button>
@@ -191,78 +207,101 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <main className="container mx-auto px-4 py-16">
-          <div className="max-w-6xl mx-auto space-y-12">
-            <div className="text-center space-y-4 animate-fade-in">
-              <div className="inline-block p-4 rounded-2xl bg-primary/10 mb-4">
-                <Sprout className="w-16 h-16 text-primary mx-auto" />
+        <main className="container mx-auto px-4 py-20 relative z-10">
+          <div className="max-w-7xl mx-auto space-y-16">
+            {/* Hero Section */}
+            <div className="text-center space-y-6 animate-fade-in">
+              <div className="inline-flex p-6 rounded-3xl bg-gradient-to-br from-primary/15 via-primary/10 to-transparent shadow-2xl border border-primary/20 mb-6">
+                <Sprout className="w-20 h-20 text-primary mx-auto drop-shadow-lg" />
               </div>
-              <h2 className="text-5xl font-bold text-foreground">
-                Welcome, {profile?.name}! 🌾
+              <h2 className="text-6xl md:text-7xl font-black text-foreground leading-tight">
+                Welcome, <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">{profile?.name}</span>! 🌾
               </h2>
-              <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
-                Track your farm's cultivation area and maximize your harvest potential
+              <p className="text-muted-foreground text-2xl max-w-3xl mx-auto font-medium leading-relaxed">
+                Transform your farming with smart cultivation tracking. <br />
+                <span className="text-primary font-semibold">Maximize yields, minimize waste.</span>
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mt-16">
+            {/* Category Cards */}
+            <div className="grid md:grid-cols-2 gap-10 mt-20">
               <Card 
-                className="group p-10 cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl bg-gradient-to-br from-card to-primary/5 border-2 border-border hover:border-primary/50 rounded-2xl overflow-hidden relative"
+                className="group p-12 cursor-pointer transition-all duration-700 hover:scale-105 bg-gradient-to-br from-card via-card to-primary/10 border-2 border-primary/30 hover:border-primary shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(34,197,94,0.4)] rounded-3xl overflow-hidden relative"
                 onClick={() => {
                   setSelectedCategory("fruits");
                   setSelectedItem(fruits[0]);
                 }}
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500" />
-                <div className="relative text-center space-y-6">
-                  <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Apple className="w-12 h-12 text-primary" />
+                {/* Animated background glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:w-56 group-hover:h-56 transition-all duration-700" />
+                
+                <div className="relative text-center space-y-8">
+                  <div className="w-32 h-32 mx-auto rounded-3xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl">
+                    <Apple className="w-16 h-16 text-primary drop-shadow-lg" />
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-foreground mb-2">Fruits</h3>
-                    <p className="text-muted-foreground text-lg">Track your fruit orchards and cultivation area</p>
+                  <div className="space-y-3">
+                    <h3 className="text-4xl font-black text-foreground">Fruits 🍎</h3>
+                    <p className="text-muted-foreground text-lg font-medium leading-relaxed">
+                      Track your orchards & optimize <br />fruit cultivation areas
+                    </p>
                   </div>
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-sm text-muted-foreground">Click to start tracking</p>
+                  <div className="pt-6 border-t-2 border-primary/20">
+                    <div className="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
+                      <span>Start Tracking</span>
+                      <TrendingUp className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
                 </div>
               </Card>
 
               <Card 
-                className="group p-10 cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl bg-gradient-to-br from-card to-primary/5 border-2 border-border hover:border-primary/50 rounded-2xl overflow-hidden relative"
+                className="group p-12 cursor-pointer transition-all duration-700 hover:scale-105 bg-gradient-to-br from-card via-card to-accent/10 border-2 border-primary/30 hover:border-primary shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(34,197,94,0.4)] rounded-3xl overflow-hidden relative"
                 onClick={() => {
                   setSelectedCategory("vegetables");
                   setSelectedItem(vegetables[0]);
                 }}
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500" />
-                <div className="relative text-center space-y-6">
-                  <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Carrot className="w-12 h-12 text-primary" />
+                {/* Animated background glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:w-56 group-hover:h-56 transition-all duration-700" />
+                
+                <div className="relative text-center space-y-8">
+                  <div className="w-32 h-32 mx-auto rounded-3xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-xl">
+                    <Carrot className="w-16 h-16 text-primary drop-shadow-lg" />
                   </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-foreground mb-2">Vegetables</h3>
-                    <p className="text-muted-foreground text-lg">Track your vegetable fields and cultivation area</p>
+                  <div className="space-y-3">
+                    <h3 className="text-4xl font-black text-foreground">Vegetables 🥕</h3>
+                    <p className="text-muted-foreground text-lg font-medium leading-relaxed">
+                      Monitor your fields & maximize <br />vegetable cultivation
+                    </p>
                   </div>
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-sm text-muted-foreground">Click to start tracking</p>
+                  <div className="pt-6 border-t-2 border-primary/20">
+                    <div className="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
+                      <span>Start Tracking</span>
+                      <TrendingUp className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
                 </div>
               </Card>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 mt-16 p-8 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 rounded-2xl">
-              <div className="text-center space-y-2">
-                <div className="text-4xl font-bold text-primary">5+</div>
-                <p className="text-sm text-muted-foreground">Crop Categories</p>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="text-4xl font-bold text-primary">∞</div>
-                <p className="text-sm text-muted-foreground">Unlimited Tracking</p>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="text-4xl font-bold text-primary">📊</div>
-                <p className="text-sm text-muted-foreground">Real-time Insights</p>
+            {/* Stats Section */}
+            <div className="relative mt-20">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/15 to-primary/10 rounded-3xl blur-2xl" />
+              <div className="relative grid md:grid-cols-3 gap-8 p-12 bg-gradient-to-r from-card/90 via-card/95 to-card/90 backdrop-blur-xl rounded-3xl border-2 border-primary/30 shadow-2xl">
+                <div className="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent hover:from-primary/20 transition-all duration-300">
+                  <div className="text-5xl font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">5+</div>
+                  <p className="text-base font-semibold text-muted-foreground">Top Crops Tracked</p>
+                </div>
+                <div className="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent hover:from-primary/20 transition-all duration-300">
+                  <div className="text-5xl font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">∞</div>
+                  <p className="text-base font-semibold text-muted-foreground">Unlimited Entries</p>
+                </div>
+                <div className="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent hover:from-primary/20 transition-all duration-300">
+                  <div className="text-5xl font-black">📊</div>
+                  <p className="text-base font-semibold text-muted-foreground">Live Analytics</p>
+                </div>
               </div>
             </div>
           </div>
@@ -272,22 +311,37 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/10 to-primary/5">
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/20 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-accent/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+      </div>
+
+      <header className="border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 sticky top-0 z-50 shadow-lg">
+        <div className="container mx-auto px-4 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
-              <Sprout className="w-6 h-6 text-primary-foreground" />
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary/80 to-primary/60 flex items-center justify-center shadow-lg">
+              <Sprout className="w-7 h-7 text-primary-foreground drop-shadow-md" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Barn Buddy</h1>
+            <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent drop-shadow-sm">
+              Barn Buddy
+            </h1>
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-secondary/50">
-              <User className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">{profile?.name}</span>
+            <div className="flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-secondary to-secondary/80 shadow-md border border-primary/20">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                <User className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-sm font-semibold text-foreground">{profile?.name}</span>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout} className="rounded-full">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleLogout} 
+              className="rounded-full border-2 hover:border-primary/50 hover:bg-primary/5 transition-all shadow-md hover:shadow-lg"
+            >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
             </Button>
@@ -295,59 +349,73 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-2xl border border-primary/20">
-            <div className="space-y-1">
-              <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
-                {selectedCategory === "fruits" ? (
-                  <>
-                    <Apple className="w-8 h-8 text-primary" />
-                    Top 5 Most Wasted Fruits in Sri Lanka
-                  </>
-                ) : (
-                  <>
-                    <Carrot className="w-8 h-8 text-primary" />
-                    Top 5 Most Wasted Vegetables in Sri Lanka
-                  </>
-                )}
-              </h2>
-              <p className="text-muted-foreground">Optimize your cultivation by tracking land area</p>
+      <main className="container mx-auto px-4 py-12 relative z-10">
+        <div className="max-w-7xl mx-auto space-y-10">
+          {/* Header Section */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 rounded-3xl blur-xl" />
+            <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 bg-gradient-to-r from-card/90 via-card/95 to-card/90 backdrop-blur-xl rounded-3xl border-2 border-primary/30 shadow-2xl">
+              <div className="space-y-3">
+                <h2 className="text-4xl font-black text-foreground flex items-center gap-4">
+                  {selectedCategory === "fruits" ? (
+                    <>
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center shadow-lg">
+                        <Apple className="w-8 h-8 text-primary" />
+                      </div>
+                      Top 5 Most Wasted Fruits 🇱🇰
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center shadow-lg">
+                        <Carrot className="w-8 h-8 text-primary" />
+                      </div>
+                      Top 5 Most Wasted Vegetables 🇱🇰
+                    </>
+                  )}
+                </h2>
+                <p className="text-muted-foreground text-lg font-medium">
+                  Optimize cultivation by tracking and reducing waste
+                </p>
+              </div>
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setSelectedItem(null);
+                }}
+                className="rounded-full px-6 py-6 text-base font-semibold border-2 hover:border-primary hover:bg-primary/10 transition-all shadow-md hover:shadow-lg hover:scale-105"
+              >
+                ← Back to Categories
+              </Button>
             </div>
-            <Button 
-              variant="outline"
-              onClick={() => {
-                setSelectedCategory(null);
-                setSelectedItem(null);
-              }}
-              className="rounded-full"
-            >
-              Back to Categories
-            </Button>
           </div>
 
           {/* Main Tracker Card */}
           {selectedItem && (
-            <Card className="p-8 bg-gradient-to-br from-card to-primary/5 shadow-2xl border-2 border-primary/20 rounded-2xl">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between pb-6 border-b border-border/50">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                      <span className="text-4xl">{selectedItem.icon}</span>
+            <Card className="relative p-10 bg-gradient-to-br from-card via-card/95 to-primary/10 shadow-2xl border-2 border-primary/30 rounded-3xl overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+              
+              <div className="relative space-y-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b-2 border-primary/20">
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/30 via-primary/20 to-primary/10 flex items-center justify-center shadow-xl">
+                      <span className="text-5xl drop-shadow-lg">{selectedItem.icon}</span>
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-foreground">{selectedItem.name}</h3>
-                      <p className="text-sm text-muted-foreground">Track your cultivation area</p>
+                      <h3 className="text-3xl font-black text-foreground">{selectedItem.name}</h3>
+                      <p className="text-base text-muted-foreground font-medium mt-1">Track cultivation area</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">Total Land Area</p>
-                    <p className="text-3xl font-bold text-primary">{selectedItem.amount} acres</p>
+                  <div className="text-center md:text-right p-6 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/30">
+                    <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wide mb-1">Total Land Area</p>
+                    <p className="text-4xl font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                      {selectedItem.amount} <span className="text-2xl">acres</span>
+                    </p>
                   </div>
                 </div>
 
-                <div className="space-y-4 pt-2">
-                  <div className="flex flex-col sm:flex-row gap-3">
+                <div className="space-y-5 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1">
                       <Input
                         type="number"
@@ -355,28 +423,28 @@ const Dashboard = () => {
                         value={inputAmount}
                         onChange={(e) => setInputAmount(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        className="w-full h-12 text-lg rounded-xl"
+                        className="w-full h-14 text-lg rounded-2xl border-2 border-primary/20 focus:border-primary shadow-md font-medium"
                         min="0"
                         step="0.1"
                       />
                     </div>
                     <Button 
                       onClick={handleUpdateAmount}
-                      className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground h-12 px-8 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                      className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary hover:to-primary/70 text-primary-foreground h-14 px-10 rounded-2xl font-bold text-base shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
                       disabled={!inputAmount || parseFloat(inputAmount) <= 0}
                     >
-                      <TrendingUp className="w-5 h-5 mr-2" />
+                      <TrendingUp className="w-6 h-6 mr-2" />
                       Add Land Area
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">Press Enter to quickly add land area</p>
+                  <p className="text-sm text-muted-foreground font-medium">💡 Pro tip: Press Enter to quickly add land area</p>
                 </div>
 
                 {showUpdateToast && (
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/30 rounded-xl animate-fade-in">
-                    <CheckCircle2 className="w-6 h-6 text-primary" />
-                    <span className="text-sm font-medium text-foreground">
-                      Land area updated successfully!
+                  <div className="flex items-center gap-4 p-5 bg-gradient-to-r from-primary/20 via-primary/15 to-primary/10 border-2 border-primary/40 rounded-2xl animate-fade-in shadow-lg">
+                    <CheckCircle2 className="w-7 h-7 text-primary" />
+                    <span className="text-base font-bold text-foreground">
+                      ✅ Land area updated successfully!
                     </span>
                   </div>
                 )}
@@ -385,29 +453,34 @@ const Dashboard = () => {
           )}
 
           {/* Selection Cards */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-foreground">
-                Select your {selectedCategory}:
+          <div className="space-y-8">
+            <div className="flex items-center justify-between px-2">
+              <h3 className="text-2xl font-black text-foreground">
+                Select your {selectedCategory} 👇
               </h3>
-              <p className="text-sm text-muted-foreground">Click any crop to track</p>
+              <p className="text-sm text-muted-foreground font-semibold">Click any crop to track</p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
               {(selectedCategory === "fruits" ? fruits : vegetables).map((item) => (
                 <Card
                   key={item.name}
-                  className={`group p-6 cursor-pointer transition-all duration-300 hover:scale-110 rounded-2xl ${
+                  className={`group p-8 cursor-pointer transition-all duration-500 hover:scale-110 rounded-3xl relative overflow-hidden ${
                     selectedItem?.name === item.name
-                      ? "bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary shadow-xl"
-                      : "bg-card border-2 border-border hover:border-primary/50 hover:shadow-lg"
+                      ? "bg-gradient-to-br from-primary/25 via-primary/15 to-primary/10 border-2 border-primary shadow-2xl ring-4 ring-primary/20"
+                      : "bg-gradient-to-br from-card to-card/90 border-2 border-primary/20 hover:border-primary hover:shadow-xl"
                   }`}
                   onClick={() => setSelectedItem(item)}
                 >
-                  <div className="text-center space-y-3">
-                    <div className="text-5xl group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
-                    <p className="font-semibold text-foreground">{item.name}</p>
-                    <div className="pt-2 border-t border-border/50">
-                      <p className="text-xs text-muted-foreground">Land Area</p>
+                  {selectedItem?.name === item.name && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle2 className="w-6 h-6 text-primary" />
+                    </div>
+                  )}
+                  <div className="text-center space-y-4">
+                    <div className="text-6xl group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 drop-shadow-lg">{item.icon}</div>
+                    <p className="font-bold text-foreground text-lg">{item.name}</p>
+                    <div className="pt-3 border-t-2 border-primary/20">
+                      <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wide mb-1">Land Area</p>
                       <p className="text-lg font-bold text-primary">{item.amount}<span className="text-sm"> acres</span></p>
                     </div>
                   </div>
