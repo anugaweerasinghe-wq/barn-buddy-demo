@@ -18,6 +18,11 @@ import heroImage from "@/assets/hero-modern-farm.jpg";
 import freshProduceImg from "@/assets/fresh-produce.jpg";
 import farmerTechImg from "@/assets/farmer-tech.jpg";
 import logisticsImg from "@/assets/logistics.jpg";
+import gallery1 from "@/assets/gallery-1.jpg";
+import gallery2 from "@/assets/gallery-2.jpg";
+import gallery3 from "@/assets/gallery-3.jpg";
+import gallery4 from "@/assets/gallery-4.jpg";
+import gallery5 from "@/assets/gallery-5.jpg";
 
 const crops = [
   { name: "Carrot", icon: "🥕", harvested: 90, total: 100 },
@@ -88,7 +93,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.1),transparent_50%)]" />
         
         <div className="relative container mx-auto px-4 py-24 md:py-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="max-w-4xl mx-auto text-center">
             <div className="space-y-8 animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/30 shadow-lg">
                 <Leaf className="w-4 h-4 text-primary" />
@@ -104,11 +109,11 @@ const Index = () => {
                 </p>
               </div>
               
-              <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Reducing Rs. 20 billion in annual crop waste through digital coordination. Join 250+ farmers transforming Sri Lankan agriculture.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
                 <Button 
                   size="lg" 
                   className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_hsl(var(--primary)/0.4)] transition-all duration-300 hover:scale-105 hover:-translate-y-1"
@@ -125,15 +130,6 @@ const Index = () => {
                 </Button>
               </div>
             </div>
-            
-            <div className="relative hidden md:block">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-3xl blur-3xl" />
-              <img 
-                src={freshProduceImg} 
-                alt="Fresh produce" 
-                className="relative rounded-3xl shadow-2xl border-4 border-background/50 hover:scale-105 transition-transform duration-500"
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -147,13 +143,16 @@ const Index = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                About Barn Buddy
+                Fair & Fixed Pricing
               </h2>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30" />
+              <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Protected pricing that puts farmers first
+              </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="relative">
+            <div className="grid md:grid-cols-2 gap-12 items-start">
+              <div className="relative order-2 md:order-1">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-3xl blur-2xl" />
                 <img 
                   src={farmerTechImg} 
@@ -162,31 +161,49 @@ const Index = () => {
                 />
               </div>
               
-              <Card className="p-8 bg-gradient-to-br from-card via-card to-primary/5 shadow-2xl border-primary/20 hover:shadow-[0_20px_60px_hsl(var(--primary)/0.2)] transition-all duration-500">
-                <div className="space-y-6">
+              <div className="space-y-6 order-1 md:order-2">
+                <Card className="p-6 bg-gradient-to-br from-card to-card/80 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-lg">
-                      <Sprout className="w-8 h-8 text-primary-foreground" />
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-md shrink-0">
+                      <Sprout className="w-6 h-6 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-foreground mb-3">Fair & Fixed Pricing</h3>
-                      <p className="text-base text-muted-foreground leading-relaxed">
-                        Barn Buddy is a platform designed to simplify how farmers manage their harvests. 
-                        We buy your produce directly at a fixed, fair price, protecting you from market 
-                        fluctuations—so even if prices rise to Rs. 400+ or Rs. 1000+, you still receive 
-                        the agreed fixed value.
+                      <h3 className="text-xl font-bold text-foreground mb-2">Price Protection</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        We buy your produce directly at a fixed, fair price, protecting you from market fluctuations. Even if prices rise to Rs. 400+ or Rs. 1000+, you receive the agreed fixed value.
                       </p>
                     </div>
                   </div>
-                  
-                  <div className="pt-4 border-t border-border/50">
-                    <p className="text-base text-muted-foreground leading-relaxed">
-                      Our system also helps you track your harvested quantities and remaining crop, 
-                      ensuring better planning and coordination while reducing wastage across Sri Lanka.
-                    </p>
+                </Card>
+
+                <Card className="p-6 bg-gradient-to-br from-card to-card/80 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-md shrink-0">
+                      <BarChart3 className="w-6 h-6 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-foreground mb-2">Smart Tracking</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Track your harvested quantities and remaining crop in real-time. Our system helps you plan better and coordinate efficiently.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+
+                <Card className="p-6 bg-gradient-to-br from-card to-card/80 border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-md shrink-0">
+                      <TrendingUp className="w-6 h-6 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-foreground mb-2">Reduce Wastage</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Better planning and coordination across Sri Lanka means less waste. Join us in reducing Rs. 20 billion in annual crop waste.
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
@@ -408,6 +425,61 @@ const Index = () => {
                 </div>
               </div>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-background to-secondary/20" />
+        
+        <div className="relative container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Our Community
+            </h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
+            <p className="text-xl text-muted-foreground">
+              See farmers transforming agriculture across Sri Lanka
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
+              {[
+                { img: gallery1, title: "Fresh Harvest", desc: "Quality produce from our farmers" },
+                { img: gallery2, title: "Sorting & Packing", desc: "Efficient processing systems" },
+                { img: gallery3, title: "Farmer Community", desc: "Working together for success" },
+                { img: gallery4, title: "Modern Technology", desc: "Digital farming solutions" },
+                { img: gallery5, title: "Sri Lankan Fields", desc: "Beautiful agricultural landscapes" },
+              ].map((item, index) => (
+                <div 
+                  key={index}
+                  className="min-w-[350px] md:min-w-[450px] snap-center group"
+                >
+                  <Card className="overflow-hidden border-primary/20 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div className="relative h-[300px] overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <img 
+                        src={item.img} 
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-6 bg-gradient-to-br from-card to-card/80">
+                      <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center mt-4">
+              <p className="text-sm text-muted-foreground">
+                Scroll to explore more →
+              </p>
+            </div>
           </div>
         </div>
       </section>
