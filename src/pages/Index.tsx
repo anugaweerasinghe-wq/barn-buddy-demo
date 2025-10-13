@@ -125,6 +125,7 @@ const Index = () => {
                   size="lg" 
                   variant="outline"
                   className="border-2 border-primary/30 hover:border-primary hover:bg-primary/5"
+                  onClick={() => navigate("/mission")}
                 >
                   Learn More
                 </Button>
