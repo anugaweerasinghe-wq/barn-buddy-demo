@@ -14,6 +14,9 @@ import {
   Leaf,
   BarChart3
 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/locales";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import heroImage from "@/assets/hero-modern-farm.jpg";
 import freshProduceImg from "@/assets/fresh-produce.jpg";
 import farmerTechImg from "@/assets/farmer-tech.jpg";
@@ -24,34 +27,39 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 
-const crops = [
-  { name: "Carrot", icon: "🥕", harvested: 90, total: 100 },
-  { name: "Tomato", icon: "🍅", harvested: 75, total: 80 },
-  { name: "Potato", icon: "🥔", harvested: 120, total: 150 },
-  { name: "Leek", icon: "🧅", harvested: 45, total: 60 },
-  { name: "Cabbage", icon: "🥬", harvested: 85, total: 100 },
+const getCrops = (t: typeof translations.en) => [
+  { name: t.crops.carrot, icon: "🥕", harvested: 90, total: 100 },
+  { name: t.crops.tomato, icon: "🍅", harvested: 75, total: 80 },
+  { name: t.crops.potato, icon: "🥔", harvested: 120, total: 150 },
+  { name: t.crops.leek, icon: "🧅", harvested: 45, total: 60 },
+  { name: t.crops.cabbage, icon: "🥬", harvested: 85, total: 100 },
 ];
 
-const steps = [
+const getSteps = (t: typeof translations.en) => [
   {
     icon: Users,
-    title: "Farmers Register",
-    description: "Farmers register and enter harvest data through our mobile app",
+    title: t.howItWorks.step1.title,
+    description: t.howItWorks.step1.description,
   },
   {
     icon: BarChart3,
-    title: "Track Progress",
-    description: "System tracks total crop demand and updates progress in real-time",
+    title: t.howItWorks.step2.title,
+    description: t.howItWorks.step2.description,
   },
   {
     icon: Package,
-    title: "Efficient Transport",
-    description: "Crops transported to retailers efficiently via trains and logistics",
+    title: t.howItWorks.step3.title,
+    description: t.howItWorks.step3.description,
   },
 ];
 
 const Index = () => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language];
+  const crops = getCrops(t);
+  const steps = getSteps(t);
+  
   const [cropsData, setCropsData] = useState(crops);
   const [selectedCrop, setSelectedCrop] = useState(crops[0]);
   const [harvestInput, setHarvestInput] = useState("");
@@ -93,24 +101,28 @@ const Index = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.1),transparent_50%)]" />
         
         <div className="relative container mx-auto px-4 py-24 md:py-32">
+          <div className="absolute top-4 right-4">
+            <LanguageSwitcher />
+          </div>
+          
           <div className="max-w-4xl mx-auto text-center">
             <div className="space-y-8 animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/30 shadow-lg">
                 <Leaf className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">Smart Farming Platform</span>
+                <span className="text-sm font-semibold text-foreground">{t.hero.badge}</span>
               </div>
               
               <div className="space-y-4">
                 <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
-                  Barn Buddy
+                  {t.hero.title}
                 </h1>
                 <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                  Smart Farming Made Simple
+                  {t.hero.subtitle}
                 </p>
               </div>
               
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Reducing Rs. 20 billion in annual crop waste through digital coordination. Join 250+ farmers transforming Sri Lankan agriculture.
+                {t.hero.description}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
@@ -119,7 +131,7 @@ const Index = () => {
                   className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_hsl(var(--primary)/0.4)] transition-all duration-300 hover:scale-105 hover:-translate-y-1"
                   onClick={() => navigate("/auth")}
                 >
-                  Get Started <ArrowRight className="ml-2 w-5 h-5" />
+                  {t.hero.getStarted} <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button 
                   size="lg" 
@@ -127,7 +139,7 @@ const Index = () => {
                   className="border-2 border-primary/30 hover:border-primary hover:bg-primary/5"
                   onClick={() => navigate("/mission")}
                 >
-                  Learn More
+                  {t.hero.learnMore}
                 </Button>
               </div>
             </div>
@@ -144,11 +156,11 @@ const Index = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Fair & Fixed Pricing
+                {t.pricing.title}
               </h2>
               <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Protected pricing that puts farmers first
+                {t.pricing.subtitle}
               </p>
             </div>
             
@@ -169,9 +181,9 @@ const Index = () => {
                       <Sprout className="w-6 h-6 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-2">Price Protection</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{t.pricing.priceProtection.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        We buy your produce directly at a fixed, fair price, protecting you from market fluctuations. Even if prices rise to Rs. 400+ or Rs. 1000+, you receive the agreed fixed value.
+                        {t.pricing.priceProtection.description}
                       </p>
                     </div>
                   </div>
@@ -183,9 +195,9 @@ const Index = () => {
                       <BarChart3 className="w-6 h-6 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-2">Smart Tracking</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{t.pricing.smartTracking.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        Track your harvested quantities and remaining crop in real-time. Our system helps you plan better and coordinate efficiently.
+                        {t.pricing.smartTracking.description}
                       </p>
                     </div>
                   </div>
@@ -197,9 +209,9 @@ const Index = () => {
                       <TrendingUp className="w-6 h-6 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-2">Reduce Wastage</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{t.pricing.reduceWastage.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        Better planning and coordination across Sri Lanka means less waste. Join us in reducing Rs. 20 billion in annual crop waste.
+                        {t.pricing.reduceWastage.description}
                       </p>
                     </div>
                   </div>
@@ -216,10 +228,10 @@ const Index = () => {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12 animate-fade-in">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Live Demo
+                {t.demo.title}
               </h2>
               <p className="text-muted-foreground text-lg">
-                See how farmers track and manage their harvests
+                {t.demo.subtitle}
               </p>
             </div>
 
@@ -232,7 +244,7 @@ const Index = () => {
                     {selectedCrop.name}
                   </h3>
                   <span className="text-sm text-muted-foreground font-medium">
-                    {selectedCrop.harvested} / {selectedCrop.total} tons harvested
+                    {selectedCrop.harvested} / {selectedCrop.total} {t.demo.harvested}
                   </span>
                 </div>
                 
@@ -243,7 +255,7 @@ const Index = () => {
                 
                 <div className="space-y-4 pt-4">
                   <div className="text-sm text-muted-foreground">
-                    Progress: <span className="font-semibold text-primary">
+                    {t.demo.progress}: <span className="font-semibold text-primary">
                       {Math.round((selectedCrop.harvested / selectedCrop.total) * 100)}%
                     </span>
                   </div>
@@ -252,7 +264,7 @@ const Index = () => {
                     <div className="flex-1">
                       <Input
                         type="number"
-                        placeholder="Enter harvest amount (tons)"
+                        placeholder={t.demo.enterAmount}
                         value={harvestInput}
                         onChange={(e) => setHarvestInput(e.target.value)}
                         className="w-full"
@@ -266,7 +278,7 @@ const Index = () => {
                       disabled={!harvestInput || parseFloat(harvestInput) <= 0}
                     >
                       <TrendingUp className="w-4 h-4 mr-2" />
-                      Update Harvest
+                      {t.demo.updateHarvest}
                     </Button>
                   </div>
                 </div>
@@ -275,7 +287,7 @@ const Index = () => {
                   <div className="flex items-center gap-2 p-4 bg-primary/10 border border-primary/20 rounded-lg animate-fade-in">
                     <CheckCircle2 className="w-5 h-5 text-primary" />
                     <span className="text-sm font-medium text-foreground">
-                      Harvest data updated successfully!
+                      {t.demo.successMessage}
                     </span>
                   </div>
                 )}
@@ -317,11 +329,11 @@ const Index = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                How It Works
+                {t.howItWorks.title}
               </h2>
               <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
               <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
-                Three simple steps to transform your farming experience
+                {t.howItWorks.subtitle}
               </p>
             </div>
 
@@ -383,11 +395,11 @@ const Index = () => {
               
               <div className="relative text-center mb-12">
                 <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                  Our Impact
+                  {t.impact.title}
                 </h2>
                 <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
                 <p className="text-xl text-muted-foreground">
-                  Making a measurable difference in Sri Lankan agriculture
+                  {t.impact.subtitle}
                 </p>
               </div>
               
@@ -399,8 +411,8 @@ const Index = () => {
                       250+
                     </div>
                   </div>
-                  <p className="text-lg text-foreground font-semibold">Farmers Supported</p>
-                  <p className="text-sm text-muted-foreground">Growing community</p>
+                  <p className="text-lg text-foreground font-semibold">{t.impact.farmers}</p>
+                  <p className="text-sm text-muted-foreground">{t.impact.activeUsers}</p>
                 </div>
                 
                 <div className="text-center space-y-4 group">
@@ -410,8 +422,8 @@ const Index = () => {
                       5
                     </div>
                   </div>
-                  <p className="text-lg text-foreground font-semibold">Crops Managed</p>
-                  <p className="text-sm text-muted-foreground">Diverse portfolio</p>
+                  <p className="text-lg text-foreground font-semibold">{t.impact.cropsTracked}</p>
+                  <p className="text-sm text-muted-foreground">{t.impact.activeUsers}</p>
                 </div>
                 
                 <div className="text-center space-y-4 group">
@@ -421,8 +433,8 @@ const Index = () => {
                       2%
                     </div>
                   </div>
-                  <p className="text-lg text-foreground font-semibold">Wastage Reduced</p>
-                  <p className="text-sm text-muted-foreground">Saving Rs. 20B annually</p>
+                  <p className="text-lg text-foreground font-semibold">{t.impact.wastageReduction}</p>
+                  <p className="text-sm text-muted-foreground">{t.impact.tonsSaved}</p>
                 </div>
               </div>
             </Card>
