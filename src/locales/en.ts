@@ -101,5 +101,56 @@ export const en = {
     potato: "Potato",
     leek: "Leek",
     cabbage: "Cabbage"
+  },
+  
+  // Mission Page
+  mission: {
+    backToHome: "Back to Home",
+    title: "Our Mission",
+    subtitle: "Reducing Crop Wastage Worth",
+    amount: "LKR 20 Billion",
+    annually: "Annually in Sri Lanka through innovative technology and sustainable farming practices",
+    
+    stats: {
+      reduction: "Reduction in Post-Harvest Losses",
+      farmersEmpowered: "Farmers Empowered",
+      commitment: "Commitment to Sustainability"
+    },
+    
+    challenge: {
+      title: "The Challenge",
+      intro: "Sri Lanka faces a critical challenge in agricultural sustainability. Every year, crops worth",
+      lostDue: "are lost due to:",
+      reason1: "Poor post-harvest management and storage facilities",
+      reason2: "Inefficient supply chain and logistics",
+      reason3: "Lack of market information and price transparency",
+      reason4: "Limited access to modern farming technology",
+      tech: "Modern Technology Adoption",
+      logistics: "Efficient Logistics Network"
+    },
+    
+    solution: {
+      title: "Our Solution",
+      inventory: "Smart Inventory Management",
+      inventoryDesc: "Real-time tracking to minimize spoilage",
+      marketAccess: "Direct Market Access",
+      marketAccessDesc: "Connect farmers directly with buyers",
+      priceTransparency: "Price Transparency",
+      priceTransparencyDesc: "Real-time market prices help farmers make informed decisions about when to sell",
+      dataInsights: "Data-Driven Insights",
+      dataInsightsDesc: "Analytics and reports to optimize harvest timing and storage strategies",
+      analytics: "Advanced Analytics Platform",
+      analyticsDesc: "Harness the power of data to predict market trends, optimize yields, and reduce waste across the entire supply chain"
+    },
+    
+    vision: {
+      title: "Our Vision for Impact",
+      description: "By 2030, we aim to reduce post-harvest losses by 50%, ensuring that more farmers can earn fair prices for their produce while contributing to food security in Sri Lanka.",
+      communities: "Empowering Communities",
+      communitiesDesc: "Supporting 10,000+ farming families across Sri Lanka",
+      growth: "Sustainable Growth",
+      growthDesc: "Reducing environmental impact through efficient resource utilization",
+      joinMission: "Join Our Mission"
+    }
   }
 };

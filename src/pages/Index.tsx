@@ -449,11 +449,11 @@ const Index = () => {
         <div className="relative container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Our Community
+              {t.gallery.title}
             </h2>
             <div className="w-24 h-1.5 bg-gradient-to-r from-primary/50 via-primary to-primary/50 mx-auto rounded-full shadow-lg shadow-primary/30 mb-4" />
             <p className="text-xl text-muted-foreground">
-              See farmers transforming agriculture across Sri Lanka
+              {t.gallery.subtitle}
             </p>
           </div>
 
@@ -505,10 +505,10 @@ const Index = () => {
           <div className="flex flex-col items-center space-y-4">
             <div className="flex items-center gap-2">
               <Leaf className="w-6 h-6 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Barn Buddy</span>
+              <span className="text-2xl font-bold text-foreground">{t.hero.title}</span>
             </div>
             <p className="text-muted-foreground text-center max-w-md">
-              © 2025 Barn Buddy. Empowering farmers, reducing waste, transforming agriculture.
+              © 2025 {t.hero.title}. {t.footer.tagline}.
             </p>
           </div>
         </div>
